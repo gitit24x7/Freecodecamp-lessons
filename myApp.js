@@ -3,6 +3,8 @@ require('dotenv').config() //challenge 6
 let express = require('express');
 const res = require('express/lib/response');
 let app = express();
+let bodyParser = require('body-parser');
+const req = require('express/lib/request');
 //1
 //console.log('Hello World')
 
@@ -11,7 +13,11 @@ let app = express();
 //  res.send('Hello Express');
 //})
 
+//step 11 but puttin it here since it is a middleware
+app.use(bodyParser.urlencoded({extended: false}))
+
 //7 correct code
+//app.use() is the method used to add middleware functions to the Express.js application's request-response pipeline.
 app.use(function(req, res, next) {
   let string = req.method + " " + req.path + " - " + req.ip;
   console.log(string);
@@ -62,11 +68,18 @@ app.get("/:word/echo",(req,res)=>{
 
 //10
 app.get("/name",(req,res)=>{
-  res.json({ name: req.query.first+" "+req.query.last});
+ res.json({ name: req.query.first+" "+req.query.last});
 })
 
-//11
+//11 body parser is for express.js basically, so it understands the post request, hence a parser is basically a translator or a decoder
+//You tell Express.js to use the body-parser "translator parts" by adding them as "middleware."
+//inside your route handler ((req, res) => { ... }), you can access the translated data using req.body.
+//app.use(bodyParser.urlencoded({extended: false}))
 
+//12 getting data from post requests
+app.post("/name",(req,res)=>{
+  res.json( {name: req.body.first+" "+req.body.last} );
+})
 
 
 
